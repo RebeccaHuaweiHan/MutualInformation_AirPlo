@@ -1,0 +1,52 @@
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from minepy import MINE
+import seaborn as sb
+from scipy.stats import pearsonr
+from scipy.interpolate import interp1d, lagrange
+xlength = 3.27*2.2
+ylength = 3.27 * 0.75*2.2
+config = {
+    "font.family": 'serif',  # 'Times New Roman'
+    # "font.serif": ['simsun'],
+    "font.serif": ['Times New Roman'],
+    "font.size": 10,
+    "mathtext.fontset": 'stix',
+    "axes.unicode_minus": False,  # 用来正常显示负号
+    "figure.figsize": (xlength, ylength),
+    "xtick.direction": 'in',
+    "ytick.direction": 'in',
+}
+plt.rcParams.update(config)
+
+# file path of air pollutants and temperature
+filepath = "./Toronto_ON_2000_2021.xlsx"
+filepath_tempt = "./temperature_Toronto_ON_2000_2021.xlsx"
+n = 8036 # both datasets have 8036 rows
+def read_temperature(path, n_row):
+    """
+    读取温度数据
+    """
+    df_tempt = pd.read_excel(path, nrows=n_row,usecols=[13])
+    df_tempt.interpolate(method='polynomial', order=2, inplace=True)
+    df_tempt = df_tempt['Mean Temp (°C)']
+    print(df_tempt,type(df_tempt))
+    return df_tempt
+
+# 读取filepath中Toronto的8类污染物数据
+df_CO = pd.read_excel(filepath, sheet_name='CO', nrows=n, usecols=list(range(7,31)))
+df_NO = pd.read_excel(filepath, sheet_name='NO', nrows=n, usecols=list(range(7,31)))
+df_NO2 = pd.read_excel(filepath, sheet_name='NO2', nrows=n, usecols=list(range(7,31)))
+df_NOX = pd.read_excel(filepath, sheet_name='NOX', nrows=n, usecols=list(range(7,31)))
+df_O3 = pd.read_excel(filepath, sheet_name='O3', nrows=n, usecols=list(range(7,31)))
+df_PM10 = pd.read_excel(filepath, sheet_name='PM10', nrows=n, usecols=list(range(7,31)))
+df_PM25 = pd.read_excel(filepath,sheet_name='PM25', nrows=n, usecols=list(range(7,31)))
+df_SO2 = pd.read_excel(filepath,sheet_name='SO2', nrows=n, usecols=list(range(7,31)))
+
+
+cols = list(df_O3.columns)
+r, c = df_O3.shape
+```
+
