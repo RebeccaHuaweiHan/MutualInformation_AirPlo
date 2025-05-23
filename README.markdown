@@ -56,7 +56,6 @@ If you use this code or findings, please cite:
 ## Contact
 
 - **Huawei Han**: rebeccahan@trentu.ca
-- **Wesley S. Burr**: wesleyburr@trentu.ca
 - **GitHub**: github.com/RebeccaHuaweiHan
 
 ## License
