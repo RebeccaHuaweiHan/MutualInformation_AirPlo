@@ -296,48 +296,51 @@ def mic_pearson():
                 PC[i,j],P_value[i,j] = pearsonr(df[0:,i],df[0:,j])
                 PC[j,i] = PC[i,j]
     MIC =np.around(MIC, decimals=2)
+    PC = np.abs(PC)
     PC = np.around(PC, decimals=2)
     # ######################################################################
     # # # seasonal pollutants data :April-September, October-March
-    # index_cold, index_warm = get_index()
-    # # print(type(index_cold))
-    # # print(len(index_cold),len(index_warm))
-    # df_cold = df[index_cold, :]
-    # df_warm = df[index_warm, :]
-    # # print(df_cold.shape,df_warm.shape)
-    #
-    # MIC_w = np.zeros((8,8))
-    # PC_w = np.zeros((8,8))
-    # P_value_w = np.zeros((8,8))
-    # MIC_c = np.zeros((8, 8))
-    # PC_c = np.zeros((8, 8))
-    # P_value_c = np.zeros((8, 8))
-    #
-    # for i in np.arange(8):
-    #     if i<=8:
-    #         for j in np.arange(i,8,1):
-    #             mine = MINE(alpha=0.6,c=15)
-    #             mine.compute_score(df_warm[0:,i],df_warm[0:,j])
-    #             MIC_w[i, j] = mine.mic()
-    #             MIC_w[j, i] = MIC_w[i, j]
-    #             PC_w[i,j], P_value_w[i,j] = pearsonr(df_warm[0:,i],df_warm[0:,j])
-    #             PC_w[j,i] = PC_w[i,j]
-    # MIC_w =np.around(MIC_w, decimals=2)
-    # PC_w = np.around(PC_w, decimals=2)
-    # # print(MIC_w)
-    # # print(PC_w)
-    # for i in np.arange(8):
-    #     if i<=8:
-    #         for j in np.arange(i,8,1):
-    #             mine = MINE(alpha=0.6,c=15)
-    #             mine.compute_score(df_cold[0:,i],df_cold[0:,j])
-    #             MIC_c[i, j] = mine.mic()
-    #             MIC_c[j, i] = MIC_c[i, j]
-    #             PC_c[i,j],P_value_c[i,j] = pearsonr(df_cold[0:,i],df_cold[0:,j])
-    #             PC_c[j,i] = PC_c[i,j]
-    # MIC_c =np.around(MIC_c, decimals=2)
-    # PC_c = np.around(PC_c, decimals=2)
-    # return MIC, PC, MIC_w, PC_w, MIC_c, PC_c
+    index_cold, index_warm = get_index()
+    # print(type(index_cold))
+    # print(len(index_cold),len(index_warm))
+    df_cold = df[index_cold, :]
+    df_warm = df[index_warm, :]
+    # print(df_cold.shape,df_warm.shape)
+
+    MIC_w = np.zeros((8,8))
+    PC_w = np.zeros((8,8))
+    P_value_w = np.zeros((8,8))
+    MIC_c = np.zeros((8, 8))
+    PC_c = np.zeros((8, 8))
+    P_value_c = np.zeros((8, 8))
+
+    for i in np.arange(8):
+        if i<=8:
+            for j in np.arange(i,8,1):
+                mine = MINE(alpha=0.6,c=15)
+                mine.compute_score(df_warm[0:,i],df_warm[0:,j])
+                MIC_w[i, j] = mine.mic()
+                MIC_w[j, i] = MIC_w[i, j]
+                PC_w[i,j], P_value_w[i,j] = pearsonr(df_warm[0:,i],df_warm[0:,j])
+                PC_w[j,i] = PC_w[i,j]
+    MIC_w =np.around(MIC_w, decimals=2)
+    PC_w = np.abs(PC_w)
+    PC_w = np.around(PC_w, decimals=2)
+    # print(MIC_w)
+    # print(PC_w)
+    for i in np.arange(8):
+        if i<=8:
+            for j in np.arange(i,8,1):
+                mine = MINE(alpha=0.6,c=15)
+                mine.compute_score(df_cold[0:,i],df_cold[0:,j])
+                MIC_c[i, j] = mine.mic()
+                MIC_c[j, i] = MIC_c[i, j]
+                PC_c[i,j],P_value_c[i,j] = pearsonr(df_cold[0:,i],df_cold[0:,j])
+                PC_c[j,i] = PC_c[i,j]
+    MIC_c =np.around(MIC_c, decimals=2)
+    PC_c = np.abs(PC_c)
+    PC_c = np.around(PC_c, decimals=2)
+    return MIC, PC, MIC_w, PC_w, MIC_c, PC_c
     # return MIC, PC
 
 def sns_heatmap(x1,x2,text):
@@ -353,9 +356,9 @@ def sns_heatmap(x1,x2,text):
 
     f1, ax1 = plt.subplots(nrows=1,ncols=2,figsize=(xlength,ylength*0.6), sharex=True, sharey=True)
     cbar_ax = f1.add_axes([.91, 0.1, .03, .82])
-    h1 = sb.heatmap(x1, annot=True, annot_kws=font, ax=ax1[0], cmap='coolwarm',linewidths=0.2, xticklabels=axis, yticklabels=axis, cbar= False)
-    ax1[0].set_title('PCC', fontsize=10)
-    h2 = sb.heatmap(x2, annot=True, annot_kws=font, ax=ax1[1], cmap='coolwarm',linewidths=0.2, xticklabels=axis, yticklabels=axis, cbar_ax= cbar_ax)
+    h1 = sb.heatmap(x1, annot=True, annot_kws=font, ax=ax1[0], cmap='cividis',linewidths=0.2, xticklabels=axis, yticklabels=axis, cbar= False)
+    ax1[0].set_title('Absolute PCC', fontsize=10)
+    h2 = sb.heatmap(x2, annot=True, annot_kws=font, ax=ax1[1], cmap='cividis',linewidths=0.2, xticklabels=axis, yticklabels=axis, cbar_ax= cbar_ax)
     ax1[1].set_title('MIC', fontsize=10)
 
     plt.subplots_adjust(left=0.1, right=0.88, top=0.92, bottom=0.1, hspace= 0.01, wspace = 0.15)
@@ -453,8 +456,8 @@ if __name__=="__main__":
     # MIC, PC = mic_pearson()
     # 4.画heat map
     sns_heatmap(PC, MIC, 'correlation')
-    # sns_heatmap(PC_w, MIC_w, 'correlation_w')
-    # sns_heatmap(PC_c, MIC_c, 'correlation_c')
+    sns_heatmap(PC_w, MIC_w, 'correlation_w')
+    sns_heatmap(PC_c, MIC_c, 'correlation_c')
     plt.show()
 
 
